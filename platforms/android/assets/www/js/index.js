@@ -73,7 +73,7 @@ var app = {
             $("#categoryTitle").empty();
             $("#categoryTitle").append($('<option value="">'+"Select Option"+'</option>'));
             $.ajax({
-                url:'http://localhost/HomeAssist/fetchCategory.php',
+                url:'http://192.168.0.52/HomeAssist/fetchCategory.php',
                 type:'POST',
                 dataType: "JSON",
                 success:function(data){
@@ -93,6 +93,23 @@ var app = {
         function hideLoading() {
             $('.ajax-panel').html('');
         }
+
+        $("#addSubscriber").on("click",function(e){
+            var data = "CategoryTitle="+$("#categoryTitle").val()+"&Username="+window.localStorage.getItem("username");
+            $.ajax({
+                url:'http://192.168.0.52/HomeAssist/saveSubscriber.php',
+                type:'POST',
+                dataType: "JSON",
+                data:data,
+                success:function(data){
+                    if(data["result"]=="success"){
+                        showAlert(data["register"])
+                    }else{
+                        showAlert(data["register"]);
+                    }
+                }
+            });
+        });
 
 
 
