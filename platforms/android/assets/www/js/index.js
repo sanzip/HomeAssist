@@ -58,14 +58,32 @@ var app = {
                     if(data["result"]=="success"){
                         showAlert(data["register"])
                     }else{
-                        showAlert(data["register"])
-                        return false;
+                        showAlert(data["register"]);
+                        window.location.hash="personalInformation";
+
                     }
 
                 }
             });
             window.location.hash="login";
 
+        }
+
+        function fetchCategory(){
+            $("#categoryTitle").empty();
+            $("#categoryTitle").append($('<option value="">'+"Select Option"+'</option>'));
+            $.ajax({
+                url:'http://localhost/HomeAssist/fetchCategory.php',
+                type:'POST',
+                dataType: "JSON",
+                success:function(data){
+                    var i=1;
+                    for(var j=0;j<data.length;j++){
+                        $("#categoryTitle").append($('<option value="'+data[j][i]+'">'+data[j][i]+'</option>'));
+                        i++;
+                    }
+                }
+            });
         }
 
         function showLoading() {
