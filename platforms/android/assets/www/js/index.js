@@ -97,15 +97,17 @@ var app = {
         $("#addSubscriber").on("click",function(e){
             var data = "CategoryTitle="+$("#categoryTitle").val()+"&Username="+window.localStorage.getItem("username");
             $.ajax({
-                url:'http://192.168.0.52/HomeAssist/saveSubscriber.php',
+                url:'http://192.168.0.58/HomeAssist/saveSubscriber.php',
                 type:'POST',
                 dataType: "JSON",
                 data:data,
                 success:function(data){
                     if(data["result"]=="success"){
-                        showAlert(data["register"])
+                        showAlert(data["subscriber"])
+                        window.location.hash="homescreen";
                     }else{
-                        showAlert(data["register"]);
+                        showAlert(data["subscriber"]);
+                        window.location.hash="homescreen";
                     }
                 }
             });

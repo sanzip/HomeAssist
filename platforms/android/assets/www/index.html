@@ -17,7 +17,7 @@
                 $("#categoryTitle").empty();
                 $("#categoryTitle").append($('<option value="">'+"Select Option"+'</option>'));
                 $.ajax({
-                    url:'http://192.168.0.52/HomeAssist/fetchCategory.php',
+                    url:'http://192.168.0.58/HomeAssist/fetchCategory.php',
                     type:'POST',
                     dataType: "JSON",
                     success:function(data){
@@ -66,10 +66,30 @@
             </div>
         </div>
         <!-- Login -->
+
         <!-- Home Screen -->
         <div data-role="page" data-theme="a" id="homescreen">
             <div class="page-content" data-role="content">
-                <p>HOMEPAGE</p>
+                <div class="modal fade" id="editStudent" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;Close</button>
+                                <h4 class="modal-title">Add Profession</h4>
+                            </div>
+                            <div class="modal-body" id="editInfoDiv">
+                                <form id="subScriberForm">
+                                    <select name="categoryTitle" id="categoryTitle">
+
+                                    </select>
+                                    <button id="addSubscriber">Save</button>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <a href="#" data-target="#editStudent" data-toggle="modal">Add</a>
                 </div>
 
             </div>
@@ -82,26 +102,7 @@
 
         </div>
 
-            <div class="modal fade" id="editStudent" role="dialog">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" onclick="clearDiv('editInfoDiv','id');">&times;</button>
-                            <h4 class="modal-title">Edit Student</h4>
-                        </div>
-                        <div class="modal-body" id="editInfoDiv">
-                            <form id="subScriberForm">
-                                <select name="categoryTitle" id="categoryTitle">
 
-                                </select>
-                                <button id="addSubscriber">Save</button>
-                            </form>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <a href="#" data-target="#editStudent" data-toggle="modal">Edit</a>
 
 
         <div class="page-content " id="personalInformationContent" data-role="content">
