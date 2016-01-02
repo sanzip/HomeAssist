@@ -16,37 +16,47 @@
     <body>
     <div class="">
 
+        <!--Display loading message-->
+        <div class="ajax-panel"></div>
+        <!--Display loading message-->
 
-
+        <div data-role="page" data-theme="a" id="emptyScreen" >
+            <div class="page-content">
+            </div>
+        </div>
 
         <!-- Login -->
         <div data-role="page" data-theme="a" id="login">
             <div class="" data-role="content"> <img src="" alt="" />
                 <div class="">
                     <div class="">
-                        <label for="username">Email / Username</label>
+                        <label for="username">Username</label>
                         <input type="text" id="username"/>
                     </div>
                     <div class="">
                         <label for="password">Password</label>
                         <input type="password" id="password"/>
                     </div>
-                    <div class=""> <a href="#" id="LoginButton" data-transition="pop" class="btn-login">Login</a>
-
-                        <button><a href="#personalInformation" id="signup" data-transition="pop" class="btn-signup">Signup</a> </button>
-                        </div>
+                    <div class="the-login-btn"> <a href="#" id="LoginButton" data-transition="pop" class="btn-login">Login</a> <a href="#personalInformation" id="signup" data-transition="pop" class="btn-signup">Signup</a> <div class="clear"></div></div>
                     </div>
 
 
-                <a href="#" id="btnForgetPw" data-transition="pop" > Forgot password? </a>
+
 
             </div>
         </div>
         <!-- Login -->
+        <!-- Home Screen -->
+        <div data-role="page" data-theme="a" id="homescreen">
+            <div class="page-content" data-role="content">
+                <p>HOMEPAGE</p>
+                </div>
 
+            </div>
+        <!-- Home Screen -->
 
         <!-- Personal Information -->
-        <div data-role="page" data-theme="a" id="personalInformation" class="page-bg">
+        <div data-role="page" data-theme="a" id="personalInformation" class="">
         <div class="">
             <div class=""> <a href="#" id="" data-transition="slide"><img src="" alt="" /></a>
 
@@ -84,15 +94,8 @@
                 <label for="location"> Location<span class="required">*</span></label>
                 <input  type="text" id="location" name="location" maxlength="50" value="">
             </div>
-
-
-
-
-
-
-
-
-        <div class="the-form-btn"> <a href="#" id="btnSave" data-transition="slide" class="btn-submit">Save</a> </div>
+        <!--<div class="the-form-btn"> <a href="#" onclick="register()" id="btnSave" data-transition="slide" class="btn-submit">Save</a> </div>-->
+        <div class="the-form-btn"> <button id="btnSave" data-transition="slide" class="btn-submit">Save</button> </div>
         <br/><br/>&nbsp;
 
         </form>
@@ -100,10 +103,12 @@
         </div>
 
         </div>
-        <!-- Personal Information -->
-
         </div>
         <!-- Personal Information -->
+
+
+
+    </div>
     <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
         <script type="text/javascript" src="js/services.js"></script>
@@ -112,6 +117,6 @@
         app.initialize();
     </script>
 
-    </div>
+
     </body>
 </html>
