@@ -86,6 +86,91 @@ var app = {
             });
         }
 
+        function appendCategory(whichCat){
+            $("#catList").empty();
+            $("#subScriberForm").appendTo("#catList");
+            var acDiv = $("#catList").find("#subScriberForm");
+            acDiv.find("#addSubscriber").remove();
+            acDiv.find("categoryTitle").attr("onChange",'fetchData("'+whichCat+'")')
+        }
+
+        function fetchData(whichCat) {
+            if (whichCat == "seekers") {
+                fetchSubscriber();
+            } else {
+                fetchTask()
+            }
+        }
+
+        function fetchSubscriber(){
+            var categoryTitle = $("#categoryTitle").val();
+            var data = "categoryTitle="+categoryTitle;
+            $("#subScriberTable").empty();
+            var subScriberTable = document.createElement("div");
+            subScriberTable.setAttribute("id", "subScriberTable");
+            $("#catList").append(subScriberTable);
+            subScriberTable.append("<table id='subcTable'></table>");
+            $("#subcTable").append("<tr><th>Name</th><th>Location</th><th>Phone Number</th></tr>");
+            $("#subcTable").append("<tbody id='subcTableBody'></tbody>");
+            var dataName=["Name","Location","PhoneNo"];
+            $.ajax({
+                url:'http://192.168.0.52/HomeAssist/subscriberList.php',
+                type:'POST',
+                data:data,
+                dataType:"JSON",
+                success:function(data){
+                    if(data!=null){
+
+                        for(var i=0;i<data.length;i++){
+                            var taskD = $("#subcTable").find("#subcTableBody");
+                            taskD.append('<tr id="'+i+'"></tr>');
+                            for(var k=0;k<dataName.length;k++){
+                                $(taskD).find("#"+i).append($('<td>"'+data[i][dataName[k]]+'"</td>'))
+                            }
+
+                        }
+                    }else{
+
+                    }
+
+                }
+            })
+        }
+
+
+        function fetchTask(){
+            $("#taskTableDiv").empty();
+            var subScriberTable = document.createElement("div");
+            subScriberTable.setAttribute("id", "taskTableDiv");
+            $("#catList").append(subScriberTable);
+            subScriberTable.append("<table id='taskTable'></table>");
+            $("#taskTable").append("<tr><th>Title</th><th>Description</th><th>StartTime</th><th>End Time</th><th>Name</th>" +
+            "<th>Location</th><th>Phone No</th><th>Email</th></tr>");
+            $("#taskTable").append("<tbody id='taskTableBody'></tbody>");
+            var categoryTitle = $("#categoryTitle").val();
+            var taskD = $("#taskTable").find("#taskTableBody");
+            taskD.empty();
+            var data = "categoryTitle="+categoryTitle;
+            var dataName=["Title","Description","StartTime","EndTime","Name","Location","PhoneNo","Email"];
+            $.ajax({
+                url:'http://192.168.0.52/HomeAssist/fetchTask.php',
+                type:'POST',
+                data:data,
+                dataType:"JSON",
+                success:function(data){
+                    for(var i=0;i<data.length;i++){
+                        var taskD = $("#taskTable").find("#taskBody");
+                        taskD.append('<tr id="'+i+'"></tr>');
+                        for(var k=0;k<dataName.length;k++){
+                                $(taskD).find("#"+i).append($('<td>"'+data[i][dataName[k]]+'"</td>'))
+                            }
+                    }
+                }
+            })
+        }
+
+
+
         function showLoading() {
             $('.ajax-panel').html('<div class="overlay"></div><div class="loading">&nbsp;</div>');
         }
