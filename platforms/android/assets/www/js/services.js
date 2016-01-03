@@ -115,6 +115,10 @@ function Login(e){
             }
 
         }
+//        error:function(error){
+//            showAlert("Unable to connect to server.")
+//            window.location.hash="login"
+//        }
 
     });
     window.location.hash="homescreen";

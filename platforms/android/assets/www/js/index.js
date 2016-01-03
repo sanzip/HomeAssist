@@ -50,7 +50,7 @@ var app = {
             var data = $("#frmPersonalInfo").serialize();
             alert(data);
             $.ajax({
-                url:'http://192.168.0.58/HomeAssist/register.php',
+                url:'http://localhost:81/HomeAssist/register.php',
                 type:'POST',
                 data:data,
                 dataType:"JSON",
@@ -73,7 +73,7 @@ var app = {
             $("#categoryTitle").empty();
             $("#categoryTitle").append($('<option value="">'+"Select Option"+'</option>'));
             $.ajax({
-                url:'http://192.168.0.52/HomeAssist/fetchCategory.php',
+                url:'http://localhost:81/HomeAssist/fetchCategory.php',
                 type:'POST',
                 dataType: "JSON",
                 success:function(data){
@@ -86,35 +86,77 @@ var app = {
             });
         }
 
-        function appendCategory(whichCat){
-            $("#catList").empty();
-            $("#subScriberForm").appendTo("#catList");
-            var acDiv = $("#catList").find("#subScriberForm");
-            acDiv.find("#addSubscriber").remove();
-            acDiv.find("categoryTitle").attr("onChange",'fetchData("'+whichCat+'")')
-        }
+
+
+        $(function(){
+            $("#pButton").on("click",function(){
+                alert("Showing");
+                $("#pro").show();
+                $("#seek").hide();
+                $.ajax({
+                    url:'http://localhost:81/HomeAssist/fetchCategory.php',
+                    type:'POST',
+                    dataType: "JSON",
+                    success:function(data){
+                        var i=1;
+                        for(var j=0;j<data.length;j++){
+                            $("#proCat").append($('<option value="'+data[j][i]+'">'+data[j][i]+'</option>'));
+                            i++;
+                        }
+                    }
+                });
+            });
+            $("#sButton").on("click",function(){
+                $("#pro").hide();
+                $("#seek").show();
+                $.ajax({
+                    url:'http://localhost:81/HomeAssist/fetchCategory.php',
+                    type:'POST',
+                    dataType: "JSON",
+                    success:function(data){
+                        alert(data);
+                        var i=1;
+                        for(var j=0;j<data.length;j++){
+                            $("#seekCat").append($('<option value="'+data[j][i]+'">'+data[j][i]+'</option>'));
+                            i++;
+                        }
+                    }
+                });
+            });
+
+            $("#proCat").on("change",function(){
+                alert("Select Changed");
+                fetchData("provider")
+            });
+            $("#seekCat").on("change",function(){
+                alert("Select Changed");
+                fetchData("seeker")
+            });
+
+
+        });
+
+
+
 
         function fetchData(whichCat) {
-            if (whichCat == "seekers") {
+            if (whichCat == "provider") {
                 fetchSubscriber();
             } else {
-                fetchTask()
+                fetchTask();
             }
         }
 
         function fetchSubscriber(){
+            $("#pro").show();
+            $("#seek").hide();
+            $("#subscriberId").show();
+//            $("#subscriberId").empty();
             var categoryTitle = $("#categoryTitle").val();
             var data = "categoryTitle="+categoryTitle;
-            $("#subScriberTable").empty();
-            var subScriberTable = document.createElement("div");
-            subScriberTable.setAttribute("id", "subScriberTable");
-            $("#catList").append(subScriberTable);
-            subScriberTable.append("<table id='subcTable'></table>");
-            $("#subcTable").append("<tr><th>Name</th><th>Location</th><th>Phone Number</th></tr>");
-            $("#subcTable").append("<tbody id='subcTableBody'></tbody>");
             var dataName=["Name","Location","PhoneNo"];
             $.ajax({
-                url:'http://192.168.0.52/HomeAssist/subscriberList.php',
+                url:'http://localhost:81/HomeAssist/subscriberList.php',
                 type:'POST',
                 data:data,
                 dataType:"JSON",
@@ -122,12 +164,10 @@ var app = {
                     if(data!=null){
 
                         for(var i=0;i<data.length;i++){
-                            var taskD = $("#subcTable").find("#subcTableBody");
-                            taskD.append('<tr id="'+i+'"></tr>');
+                            var taskD = $("#subList");
                             for(var k=0;k<dataName.length;k++){
-                                $(taskD).find("#"+i).append($('<td>"'+data[i][dataName[k]]+'"</td>'))
+                                $(taskD).append($('<li>"'+data[i][dataName[k]]+'"</li>'))
                             }
-
                         }
                     }else{
 
@@ -139,21 +179,17 @@ var app = {
 
 
         function fetchTask(){
-            $("#taskTableDiv").empty();
-            var subScriberTable = document.createElement("div");
-            subScriberTable.setAttribute("id", "taskTableDiv");
-            $("#catList").append(subScriberTable);
-            subScriberTable.append("<table id='taskTable'></table>");
-            $("#taskTable").append("<tr><th>Title</th><th>Description</th><th>StartTime</th><th>End Time</th><th>Name</th>" +
-            "<th>Location</th><th>Phone No</th><th>Email</th></tr>");
-            $("#taskTable").append("<tbody id='taskTableBody'></tbody>");
+            $("#pro").hide();
+            $("#seek").show();
+            $("#taskTableId").show();
+//            $("#taskTableId").empty();
             var categoryTitle = $("#categoryTitle").val();
-            var taskD = $("#taskTable").find("#taskTableBody");
+            var taskD = $("#taskTableId").find("#taskTableBody");
             taskD.empty();
             var data = "categoryTitle="+categoryTitle;
             var dataName=["Title","Description","StartTime","EndTime","Name","Location","PhoneNo","Email"];
             $.ajax({
-                url:'http://192.168.0.52/HomeAssist/fetchTask.php',
+                url:'http://localhost:81/HomeAssist/fetchTask.php',
                 type:'POST',
                 data:data,
                 dataType:"JSON",
@@ -182,23 +218,46 @@ var app = {
         $("#addSubscriber").on("click",function(e){
             var data = "CategoryTitle="+$("#categoryTitle").val()+"&Username="+window.localStorage.getItem("username");
             $.ajax({
-                url:'http://192.168.0.58/HomeAssist/saveSubscriber.php',
+                url:'http://localhost:81/HomeAssist/saveSubscriber.php',
+                type:'POST',
+                dataType: "JSON",
+                data:data,
+                success:function(data) {
+                    if (data != null) {
+                        if (data["result"] == "success") {
+                            showAlert(data["subscriber"])
+                            window.location.hash = "homescreen";
+                        } else {
+                            showAlert(data["subscriber"]);
+                            window.location.hash = "homescreen";
+                        }
+                    } else {
+                        showAlert("Failed to build a connection with server");
+                        window.location.hash = "homescreen";
+                    }
+                }
+                });
+        });
+
+        $("#addSeeker").on("click",function(e){
+            var data = $("#seekerDataForm").serialize();
+            data = data+"&Username="+window.localStorage.getItem("username");
+            $.ajax({
+                url:'http://localhost:81/HomeAssist/saveTask.php',
                 type:'POST',
                 dataType: "JSON",
                 data:data,
                 success:function(data){
                     if(data["result"]=="success"){
-                        showAlert(data["subscriber"])
+                        showAlert(data["task"]);
                         window.location.hash="homescreen";
                     }else{
-                        showAlert(data["subscriber"]);
+                        showAlert(data["task"]);
                         window.location.hash="homescreen";
                     }
                 }
             });
         });
-
-
 
 
 

@@ -7,6 +7,7 @@ $(document).delegate("#personalInformation", "pageshow", function() {
     var username = window.localStorage.getItem("username");
 
 });
+
 var globalPersonalInfo = {
     isNewContact : true,
 
@@ -41,5 +42,7 @@ appPersonalInfoPanel = {
         globalPersonalInfo.resetAll();
 
     }
+
 };
+
 

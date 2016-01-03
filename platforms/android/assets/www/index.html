@@ -1,170 +1,370 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta name="format-detection" content="telephone=no">
-        <meta name="msapplication-tap-highlight" content="no">
-        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
-        <link rel="stylesheet" type="text/css" href="css/index.css">
-        <title>Home Assist</title>
-        <link rel="stylesheet" href="jquery-mobile/jquery.mobile-1.4.3.min.css" />
-        <script src="jquery-mobile/jquery-1.11.1.min.js" type="text/javascript"></script>
-        <script src="jquery-mobile/jquery.mobile-1.4.3.min.js" type="text/javascript"></script>
-        <script src="jquery-mobile/jquery.validate.min.js" type="text/javascript"></script>
-        <script src="js/bootstrap.min.js" type="text/javascript"></script>
-        <link href="css/bootstrap.min.css" rel="stylesheet"/>
-        <script type="text/javascript">
-            $( document ).ready(function() {
-                $("#categoryTitle").empty();
-                $("#categoryTitle").append($('<option value="">'+"Select Option"+'</option>'));
-                $.ajax({
-                    url:'http://192.168.0.58/HomeAssist/fetchCategory.php',
-                    type:'POST',
-                    dataType: "JSON",
-                    success:function(data){
-                        var i=1;
-                        for(var j=0;j<data.length;j++){
-                            $("#categoryTitle").append($('<option value="'+data[j][i]+'">'+data[j][i]+'</option>'));
-                            i++;
-                        }
+<head>
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+    <link rel="stylesheet" type="text/css" href="css/index.css">
+    <title>Home Assist</title>
+
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+
+    <link rel="stylesheet" href="jquery-mobile/jquery.mobile-1.4.3.min.css" />
+    <script src="jquery-mobile/jquery-1.11.1.min.js" type="text/javascript"></script>
+    <script src="jquery-mobile/jquery.mobile-1.4.3.min.js" type="text/javascript"></script>
+    <script src="jquery-mobile/jquery.validate.min.js" type="text/javascript"></script>
+    <script src="js/bootstrap.min.js" type="text/javascript"></script>
+    <link href="css/bootstrap.min.css" rel="stylesheet"/>
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+            $("#categoryTitle").empty();
+            $(".catTitleS").empty();
+            //            $("#seek").empty();
+            //            $("#pro").empty();
+            //            $("#taskTableId").empty();
+            //            $("#subscriberId").empty();
+            $("#categoryTitle").append($('<option value="">' + "Select Option" + '</option>'));
+            $(".catTitleS").append($('<option value="">' + "Select Option" + '</option>'));
+            $("#seekCat").append($('<option value="">' + "Select Option" + '</option>'));
+            $("#proCat").append($('<option value="">' + "Select Option" + '</option>'));
+            $.ajax({
+                url : 'http://localhost:81/HomeAssist/fetchCategory.php',
+                type : 'POST',
+                dataType : "JSON",
+                success : function(data) {
+                    var i = 1;
+                    for (var j = 0; j < data.length; j++) {
+                        $("#categoryTitle").append($('<option value="' + data[j][i] + '">' + data[j][i] + '</option>'));
+                        $(".catTitleS").append($('<option value="' + data[j][i] + '">' + data[j][i] + '</option>'));
+                        $("#seekCat").append($('<option value="' + data[j][i] + '">' + data[j][i] + '</option>'));
+                        $("#proCat").append($('<option value="' + data[j][i] + '">' + data[j][i] + '</option>'));
+                        i++;
                     }
-                });
+                },
+                error : function(error) {
+                    //                    alert(error);
+                }
             });
-        </script>
+            $("#taskTableId").hide();
+            $("#subscriberId").hide();
+            $("#seek").hide();
+            $("#pro").hide();
 
+        });
 
-    </head>
-    <body>
-    <div class="">
-
-        <!--Display loading message-->
-        <div class="ajax-panel"></div>
-        <!--Display loading message-->
-
-        <div data-role="page" data-theme="a" id="emptyScreen" >
-            <div class="page-content">
-            </div>
-        </div>
-
-        <!-- Login -->
-        <div data-role="page" data-theme="a" id="login">
-            <div class="page-content login-screen" data-role="content"> <img src="" alt="" />
-                <div class="login-box">
-                    <div class="form-row">
-                        <label for="username">Username</label>
-                        <input type="text" id="username"/>
-                    </div>
-                    <div class="">
-                        <label for="password">Password</label>
-                        <input type="password" id="password"/>
-                    </div>
-                    <div class="the-login-btn"> <a href="#" id="LoginButton" data-transition="pop" class="btn-login">Login</a> <a href="#personalInformation" id="signup" data-transition="pop" class="btn-signup">Signup</a> <div class="clear"></div></div>
-                    </div>
-
-
-
-
-            </div>
-        </div>
-        <!-- Login -->
-
-        <!-- Home Screen -->
-        <div data-role="page" data-theme="a" id="homescreen">
-            <div class="page-content" data-role="content">
-                <div class="modal fade" id="editStudent" role="dialog">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal">&times;Close</button>
-                                <h4 class="modal-title">Add Profession</h4>
-                            </div>
-                            <div class="modal-body" id="editInfoDiv">
-                                <form id="subScriberForm">
-                                    <select name="categoryTitle" id="categoryTitle">
-
-                                    </select>
-                                    <button id="addSubscriber">Save</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <a href="#" data-target="#editStudent" data-toggle="modal">Add</a>
-                <button onclick="appendCategory('providers')">Providers</button>
-                <button onclick="appendCategory('seekers')">Seekers</button>
-                <div id="catList">
-
-                </div>
-                </div>
-
-            </div>
-        <!-- Home Screen -->
-
-        <!-- Personal Information -->
-        <div data-role="page" data-theme="a" id="personalInformation" class="">
-        <div class="">
-            <div class=""> <a href="#" id="" data-transition="slide"><img src="" alt="" /></a>
-
-        </div>
-
-
-
-
-        <div class="page-content " id="personalInformationContent" data-role="content">
-
-        <div class="">
-        <form id="frmPersonalInfo">
-            <div class="ui-field-contain">
-                <label for="email">Email<span class="required">*</span></label>
-                <input type="email" name="email" id="email" maxlength="255" value="">
-            </div>
-        <div class="ui-field-contain">
-            <label for="uname"> Username<span class="required">*</span></label>
-            <input type="text" name="uname" id="uname" maxlength="255" value="">
-        </div>
-        <div class="ui-field-contain" id="row_passwordPInfo">
-            <label for="passwordPInfo">Password<span class="required">*</span></label>
-            <input type="password" name="passwordPInfo" maxlength="50" id="passwordPInfo" value="">
-        </div>
-        <div class="ui-field-contain" id="row_confirmPasswordPInfo">
-            <label for="confirmPasswordPInfo">Confirm Password<span class="required">*</span></label>
-            <input type="password" name="confirmPasswordPInfo" maxlength="50" id="confirmPasswordPInfo" value="">
-        </div>
-
-        <div class="ui-field-contain">
-            <label for="name"> Name<span class="required">*</span></label>
-            <input  type="text" id="name" name="name" maxlength="50" value="">
-        </div>
-            <div class="ui-field-contain">
-                <label for="phone"> Contact<span class="required">*</span></label>
-                <input type="tel" name="phone" id="phone" maxlength="20" value="">
-            </div>
-            <div class="ui-field-contain">
-                <label for="location"> Location<span class="required">*</span></label>
-                <input  type="text" id="location" name="location" maxlength="50" value="">
-            </div>
-        <!--<div class="the-form-btn"> <a href="#" onclick="register()" id="btnSave" data-transition="slide" class="btn-submit">Save</a> </div>-->
-        <div class="the-form-btn"> <button id="btnSave" data-transition="slide" class="btn-submit">Save</button> </div>
-        <br/><br/>&nbsp;
-
-        </form>
-        </div>
-        </div>
-
-        </div>
-        </div>
-        <!-- Personal Information -->
-
-
-
-    </div>
-    <script type="text/javascript" src="cordova.js"></script>
-    <script type="text/javascript" src="js/index.js"></script>
-        <script type="text/javascript" src="js/services.js"></script>
-        <script type="text/javascript" src="js/SignUpInfo.js"></script>
-    <script>
-        app.initialize();
     </script>
 
+</head>
+<body>
+<div class="">
 
-    </body>
+<!--Display loading message-->
+<div class="ajax-panel"></div>
+<!--Display loading message-->
+
+<div data-role="page" data-theme="a" id="emptyScreen" >
+    <div class="page-content"></div>
+</div>
+
+<!-- Login -->
+<div data-role="page" data-theme="a" id="login">
+
+    <div id="header" data-role="header" data-theme="a" data-position="fixed">
+
+        <!--<a id="bars-button" class="ui-btn ui-icon-bars ui-btn-icon-notext ui-corner-all ui-nodisc-icon transparentButton"  class="ui-btn-left"  href="#navpanel"></a>-->
+
+        <img id="mainLogo" src="img/home%20assist.png"/>
+    </div>
+    <!-- header -->
+
+    <div class="page-content login-screen" data-role="content">
+        <img src="" alt="" />
+        <div class="login-box">
+            <div class="form-row">
+                <label for="username">Username</label>
+                <input type="text" id="username"/>
+            </div>
+            <div class="">
+                <label for="password">Password</label>
+                <input type="password" id="password"/>
+            </div>
+            <div class="the-login-btn ">
+                <a style="background: #FFA623;color: #fff;text-shadow: none;border: 2px solid rgba(220, 152, 52, 0.9);" href="#" id="LoginButton" data-transition="pop" class="ui-btn ui-shadow " class="btn-login">Login</a><a  style="background: #FFA623;color: #fff;text-shadow: none;border: 2px solid rgba(220, 152, 52, 0.9);"  href="#personalInformation" class="ui-btn ui-shadow" id="signup" data-transition="pop" class="btn-signup">Signup</a><div class="clear"></div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Home Screen -->
+<div data-role="page" data-theme="a" id="homescreen">
+    <div id="header" data-role="header" data-theme="a" data-position="fixed">
+
+        <a id="bars-button" class="ui-btn ui-icon-bars ui-btn-icon-notext ui-corner-all ui-nodisc-icon transparentButton"  class="ui-btn-left"  href="#navpanel"></a>
+
+        <img id="mainLogo" src="img/home%20assist.png"/>
+    </div>
+    <!-- header -->
+
+    <div  data-role="panel" id="navpanel" data-theme="a"	data-display="slidedown" data-position="left">
+        <div  data-role="controlgroup" data-corners="false">
+
+            <a href="about.html" data-role="button">About</a>
+            <a href="authors.html" data-role="button">Authors</a>
+            <a href="contact.html" data-role="button">Contact</a>
+            <a href="developers.html" data-role="button">Developers</a>
+        </div>
+    </div>
+    <!-- menu -->
+
+    <div class="page-content" data-role="content">
+        <!--
+                    <button id="pButton">
+                        Providers
+                    </button>
+                    <button id="sButton">
+                        Seekers
+                    </button> -->
+
+        <div data-role="tabs" id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+            <div data-role="navbar" class="ui-navbar" role="navigation">
+                <ul class="ui-grid-a ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all" role="tablist">
+                    <li class="ui-block-a ui-state-default ui-corner-top ui-tabs-active ui-state-active" role="tab" tabindex="0" aria-controls="one" aria-labelledby="ui-id-1" aria-selected="true">
+                        <a style="background: #FFA623;color: #fff;text-shadow: none;border: 2px solid rgba(220, 152, 52, 0.9);" href="#one" data-ajax="false" class="ui-link ui-btn ui-tabs-anchor ui-btn-active" role="presentation" tabindex="-1"  id="pButton">Providers</a>
+                    </li>
+                    <li class="ui-block-b ui-state-default ui-corner-top" role="tab" tabindex="-1" aria-controls="two" aria-labelledby="ui-id-2" aria-selected="false">
+                        <a style="background: #FFA623;color: #fff;text-shadow: none;border: 2px solid rgba(220, 152, 52, 0.9);" href="#two" data-ajax="false" class="ui-link ui-btn ui-tabs-anchor" role="presentation" tabindex="-1"   id="sButton">Seekers</a>
+                    </li>
+                </ul>
+            </div>
+
+
+            <div id="catList">
+                <div id="pro">
+                    <select name="categoryTitle" id="proCat">
+                        <option value="Advertising">Advertising</option>
+                        <option value="Printing">Printing</option>
+                        <option value="Plumbing">Plumbing</option>
+                    </select>
+                </div>
+                <div id="seek">
+                    <select name="categoryTitle" id="seekCat">
+
+                    </select>
+                </div>
+                <div id="subscriberId">
+
+                    <div id="one" aria-labelledby="ui-id-1" class="ui-tabs-panel ui-widget-content ui-corner-bottom" role="tabpanel" aria-expanded="true" aria-hidden="false" style="display: block;">
+                        <ul  data-filter="true" data-filter-placeholder="Search Provider" data-role="listview" data-inset="true" class="ui-listview ui-listview-inset ui-corner-all ui-shadow">
+                            <li class="ui-first-child">
+                                <a href="#" class="ui-btn ui-btn-icon-right ui-icon-carat-r">sanjeev</a>
+                            </li>
+                            <li>
+                                <a href="#" class="ui-btn ui-btn-icon-right ui-icon-carat-r">abhishek</a>
+                            </li>
+                            <li>
+                                <a href="#" class="ui-btn ui-btn-icon-right ui-icon-carat-r">sachin</a>
+                            </li>
+                            <li>
+                                <a href="#" class="ui-btn ui-btn-icon-right ui-icon-carat-r">sameer</a>
+                            </li>
+                            <li class="ui-last-child">
+                                <a href="#" class="ui-btn ui-btn-icon-right ui-icon-carat-r">anil</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div id="two" aria-labelledby="ui-id-2" class="ui-tabs-panel ui-widget-content ui-corner-bottom" role="tabpanel" aria-expanded="false" aria-hidden="true" style="display: none;">
+                        <ul  data-filter="true" data-filter-placeholder="Search Seekers" data-role="listview" data-inset="true" class="ui-listview ui-listview-inset ui-corner-all ui-shadow">
+                            <li class="ui-first-child">
+                                <a href="#" class="ui-btn ui-btn-icon-right ui-icon-carat-r">sanjeev</a>
+                            </li>
+                            <li>
+                                <a href="#" class="ui-btn ui-btn-icon-right ui-icon-carat-r">abhisehek</a>
+                            </li>
+                            <li>
+                                <a href="#" class="ui-btn ui-btn-icon-right ui-icon-carat-r">sagar</a>
+                            </li>
+                            <li>
+                                <a href="#" class="ui-btn ui-btn-icon-right ui-icon-carat-r">sanjeev</a>
+                            </li>
+                            <li class="ui-last-child">
+                                <a href="#" class="ui-btn ui-btn-icon-right ui-icon-carat-r">sanjeev</a>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div id="taskTableId">
+                <table>
+                    <tr>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th>Start Time</th>
+                        <th>End Time</th>
+                        <th>Name</th>
+                        <th>Location</th>
+                        <th>Phone Number</th>
+                        <th>Email</th>
+                    </tr>
+                    <tbody id="taskTableBody">
+
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+        <br>
+        <br>
+
+        <a href="#" data-icon="plus" id="aAdd"  data-target="#editStudent" data-toggle="modal"><img src="img/add.png"/> </a>
+
+        <div class="modal fade" id="editStudent" role="dialog">
+            <div class="modal-dialog">
+                <div style="border: 2px solid #FF9800" class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">
+                            &times;
+                        </button>
+                        <h4 class="modal-title">Add Profession</h4>
+                    </div>
+                    <div class="modal-body" id="editInfoDiv">
+                        <form id="subScriberForm">
+                            <select name="categoryTitle" id="categoryTitle">
+
+                            </select>
+                            <button  style="background: #FFA623;color: #fff;text-shadow: none;border: 2px solid rgba(220, 152, 52, 0.9);" id="addSubscriber">
+                                Save
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <a href="#" id="aAsk" data-target="#addHelp"  data-toggle="modal"><img src="img/ask.png"/></a>
+
+
+        <div class="modal fade" id="addHelp" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content" style="border: 2px solid #FF9800">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">
+                            &times;
+                        </button>
+                        <h4 class="modal-title">Add Seeker</h4>
+                    </div>
+                    <div class="modal-body" id="addHelpData">
+                        <form id="seekerDataForm">
+                            <select name="categoryTitle" class="catTitleS">
+
+                            </select>
+                            <input type="text" name="taskTitle" id="title" placeholder="Title"/>
+                            <input type="text" name="description" id="description" placeholder="Description"/>
+                            <input type="text" data-role="date" name="startTime" id="startDate" placeholder="Start Time"/>
+                            <input type="text" data-role="date" name="endTime" id="endDate" placeholder="Start Time"/>
+                            <button style="background: #FFA623;color: #fff;text-shadow: none;border: 2px solid rgba(220, 152, 52, 0.9);" id="addSeeker">
+                                Save
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+<!-- Home Screen -->
+
+<!-- Personal Information -->
+<div data-role="page" data-theme="a" id="personalInformation" class="">
+    <div class="">
+        <div class="">
+            <a href="#" id="" data-transition="slide"><img src="" alt="" /></a>
+
+        </div>
+
+        <div id="header" data-role="header" data-theme="a" data-position="fixed">
+
+            <!--<a id="bars-button" class="ui-btn ui-icon-bars ui-btn-icon-notext ui-corner-all ui-nodisc-icon transparentButton"  class="ui-btn-left"  href="#navpanel"></a>-->
+
+            <img id="mainLogo" src="img/home%20assist.png"/>
+        </div>
+        <!-- header -->
+
+        <!--<div  data-role="panel" id="navpanel" data-theme="a"	data-display="slidedown" data-position="left">-->
+        <!--<div  data-role="controlgroup" data-corners="false">-->
+
+        <!--<a href="about.html" data-role="button">About</a>-->
+        <!--<a href="authors.html" data-role="button">Authors</a>-->
+        <!--<a href="contact.html" data-role="button">Contact</a>-->
+        <!--<a href="developers.html" data-role="button">Developers</a>-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--<!-- menu -->
+
+        <div class="ui-panel-wrapper">
+
+            <div class="page-content" id="personalInformationContent" data-role="content">
+
+                <form id="frmPersonalInfo">
+                    <div class="ui-field-contain">
+                        <label for="email">Email<span class="required">*</span></label>
+                        <input type="email" name="email" id="email" maxlength="255" value="">
+                    </div>
+                    <div class="ui-field-contain">
+                        <label for="uname"> Username<span class="required">*</span></label>
+                        <input type="text" name="uname" id="uname" maxlength="255" value="">
+                    </div>
+                    <div class="ui-field-contain" id="row_passwordPInfo">
+                        <label for="passwordPInfo">Password<span class="required">*</span></label>
+                        <input type="password" name="passwordPInfo" maxlength="50" id="passwordPInfo" value="">
+                    </div>
+                    <div class="ui-field-contain" id="row_confirmPasswordPInfo">
+                        <label for="confirmPasswordPInfo">Confirm Password<span class="required">*</span></label>
+                        <input type="password" name="confirmPasswordPInfo" maxlength="50" id="confirmPasswordPInfo" value="">
+                    </div>
+
+                    <div class="ui-field-contain">
+                        <label for="name"> Name<span class="required">*</span></label>
+                        <input  type="text" id="name" name="name" maxlength="50" value="">
+                    </div>
+                    <div class="ui-field-contain">
+                        <label for="phone"> Contact<span class="required">*</span></label>
+                        <input type="tel" name="phone" id="phone" maxlength="20" value="">
+                    </div>
+                    <div class="ui-field-contain">
+                        <label for="location"> Location<span class="required">*</span></label>
+                        <input  type="text" id="location" name="location" maxlength="50" value="">
+                    </div>
+                    <!--<div class="the-form-btn"> <a href="#" onclick="register()" id="btnSave" data-transition="slide" class="btn-submit">Save</a> </div>-->
+                    <div class="the-form-btn">
+                        <button class="ui-btn ui-shadow" id="btnSave" data-transition="slide" class="btn-submit">
+                            Save
+                        </button>
+                    </div>
+                    <br/>
+                    <br/>
+                    &nbsp;
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+<!-- Personal Information -->
+
+</div>
+<script type="text/javascript" src="cordova.js"></script>
+<script type="text/javascript" src="js/index.js"></script>
+<script type="text/javascript" src="js/services.js"></script>
+<script type="text/javascript" src="js/SignUpInfo.js"></script>
+<script>
+    app.initialize();
+</script>
+
+</body>
 </html>
