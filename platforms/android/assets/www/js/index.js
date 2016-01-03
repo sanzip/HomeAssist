@@ -267,27 +267,7 @@ var app = {
 
 
         });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         appPersonalInfoPanel.initialize();
-
-
         VerifyUser();
 
     },
